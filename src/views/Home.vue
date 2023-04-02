@@ -1,18 +1,55 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <button @click="hideCategory = !hideCategory">toggle show category</button>
+    <hr />
+    <AppSelect :config="periodSelectConfig" />
+    <hr />
+    <AppSelect :config="gradeSelectConfig" />
+    <hr />
+    <AppSelect v-if="hideCategory" :config="categorySelectConfig" />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "@/components/HelloWorld.vue"; // @ is an alias to /src
+import AppSelect, {
+  AppSelectConfig,
+  createAppSelectConfig,
+} from "../components/app-select.vue";
 
 @Component({
   components: {
-    HelloWorld,
+    AppSelect,
   },
 })
-export default class Home extends Vue {}
+export default class Home extends Vue {
+  periodSelectConfig?: AppSelectConfig;
+
+  gradeSelectConfig?: AppSelectConfig;
+
+  categorySelectConfig?: AppSelectConfig;
+
+  hideCategory = true;
+
+  created() {
+    this.periodSelectConfig = createAppSelectConfig({
+      prop: "period",
+    });
+
+    this.gradeSelectConfig = createAppSelectConfig({
+      prop: "grade",
+    });
+
+    this.categorySelectConfig = createAppSelectConfig({
+      prop: "category",
+    });
+
+    this.periodSelectConfig.addChild(
+      this.gradeSelectConfig.beforeUpdateFromParent((config) => {
+        console.log(config);
+      })
+    );
+    this.gradeSelectConfig.addChild(this.categorySelectConfig);
+  }
+}
 </script>
