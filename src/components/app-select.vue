@@ -12,12 +12,12 @@ import { Vue, Prop } from "vue-property-decorator";
 import { AppSelectOptions } from "@/types/app-select";
 import {
   createConfig,
-  AppCreateConfig,
+  DependencyConfig,
   DependencyComponent,
   DependencyVue,
 } from "./create-config";
 
-export type AppSelectConfig = AppCreateConfig<AppSelectOptions, AppSelect>;
+export type AppSelectConfig = DependencyConfig<AppSelectOptions, AppSelect>;
 
 export function createAppSelectConfig(
   options: AppSelectOptions
@@ -25,7 +25,7 @@ export function createAppSelectConfig(
   return createConfig<AppSelectOptions, AppSelect>(options);
 }
 
-@DependencyComponent()
+@DependencyComponent
 export default class AppSelect
   extends Vue
   implements DependencyVue<AppSelectConfig>
